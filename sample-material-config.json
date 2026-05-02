@@ -1,0 +1,20 @@
+{
+  "$schema": "./material-config.schema.json",
+  "version": "sample-material-config-v1",
+  "materials": {
+    "books-elasticsearch": {
+      "backend": "elasticsearch",
+      "mappingFile": "sample-mappings.json",
+      "target": {
+        "index": "books_v1"
+      }
+    },
+    "journals-solr": {
+      "backend": "solr",
+      "mappingFile": "sample-mappings.json",
+      "target": {
+        "core": "journals_v1"
+      }
+    }
+  }
+}

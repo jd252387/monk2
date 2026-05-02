@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/material-config.schema.json",
+  "title": "Material Routing Configuration",
+  "description": "Defines material type routing metadata used by the Monk translator to select a single search backend and locate the mapping contract for each material.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "materials"
+  ],
+  "properties": {
+    "$schema": {
+      "description": "Optional JSON Schema URI for editor validation of material configuration documents.",
+      "type": "string"
+    },
+    "version": {
+      "description": "Human-readable configuration version emitted in translation diagnostics.",
+      "type": "string",
+      "minLength": 1
+    },
+    "materials": {
+      "description": "Map of public material type identifiers to backend routing metadata.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/material"
+      }
+    }
+  },
+  "$defs": {
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "backend",
+        "mappingFile",
+        "target"
+      ],
+      "properties": {
+        "backend": {
+          "description": "Search backend selected when this material type is requested.",
+          "type": "string",
+          "enum": [
+            "elasticsearch",
+            "solr"
+          ]
+        },
+        "mappingFile": {
+          "description": "Repository-relative path to the mapping contract used for this material.",
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "description": "Backend-specific physical destination for the material.",
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "backend": {
+                "const": "elasticsearch"
+              }
+            },
+            "required": [
+              "backend"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "index"
+                ],
+                "properties": {
+                  "index": {
+                    "description": "Elasticsearch index or alias queried for this material.",
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "backend": {
+                "const": "solr"
+              }
+            },
+            "required": [
+              "backend"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "core"
+                ],
+                "properties": {
+                  "core": {
+                    "description": "Solr core or collection queried for this material.",
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
