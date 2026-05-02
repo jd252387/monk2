@@ -36,7 +36,7 @@
   "$defs": {
     "QueryNode": {
       "type": "object",
-      "description": "A recursive query node. A node with an empty field is a boolean/group node; if the field is equal to the name of a a node with a non-empty field is a leaf field query.",
+      "description": "A recursive query node. A node with an empty field is a boolean/group node; if the field is equal to the name of a document type in the mapping, then the sub-queries in 'data' query the fields in the specified document type; if 'field' is empty, then the node is a leaf field query.",
       "$comment": "The field value determines the shape of data and whether occur/mm are allowed.",
       "additionalProperties": false,
       "required": [
@@ -46,18 +46,18 @@
       "properties": {
         "field": {
           "type": "string",
-          "description": "Field to query. If empty, then the 'data' field is expected to be an array of arrays, representing a boolean relationship of sub-queries."
+          "description": "Field to query. If empty or equal to the name of a document type, then the 'data' field is expected to be an array of arrays, representing a boolean relationship of sub-queries or a nested query."
         },
         "minimumMatch": {
           "type": "integer",
-          "description": "Required amount of 'should' clauses that should match. Only allowed when 'field' is empty."
+          "description": "Required amount of 'should' clauses that should match. Only allowed when 'field' is empty or equal to a document type name."
         },
         "isNot": {
           "type": "boolean",
           "description": "If true, then perform negation on this clause, i.e. require this query node to NOT match."
         },
         "data": {
-          "description": "When 'field' is not empty, contains an object representing the query to match on the specified field. When 'field' is empty, contains an array of arrays representing a boolean sub-query. Each direct array under 'data' represents a 'should' clause, and within each sub-array, there are sub-query nodes which are treated with a 'must' relationship, i.e. every query node within a single sub-array should match."
+          "description": "When 'field' is not empty, contains an object representing the query payload to match on the specified field. When 'field' is empty or equal to the name of a document type, contains an array of arrays representing a boolean sub-query. Each direct array under 'data' represents a 'should' clause, and within each sub-array, there are sub-query nodes which are treated with a 'must' relationship, i.e. every query node within a single sub-array should match. In the case of a nested query (when 'field' is equal to the name of a document type), all clauses under each sub-array must match on the same child document. "
         }
       },
       "allOf": [
