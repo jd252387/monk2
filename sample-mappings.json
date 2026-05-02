@@ -1,0 +1,67 @@
+{
+  "$schema": "./mappings.schema.json",
+  "primaryKey": "item_id",
+  "root": {
+    "id": {
+      "type": "string",
+      "sourceField": "id",
+      "destinationField": "doc_id"
+    },
+    "title": {
+      "type": "freetext",
+      "sourceField": "title",
+      "destinationField": "title_txt"
+    },
+    "publishedAt": {
+      "type": "datetime",
+      "sourceField": "published_at",
+      "destinationField": "published_at_dt"
+    },
+    "pageCount": {
+      "type": "number",
+      "sourceField": "page_count",
+      "destinationField": "page_count_i"
+    },
+    "author": {
+      "type": "subdocument",
+      "subdocumentType": "author",
+      "sourceField": "author",
+      "destinationField": "author_doc"
+    },
+    "sections": {
+      "type": "subdocument",
+      "subdocumentType": "section",
+      "sourceField": "sections",
+      "destinationField": "section_docs"
+    }
+  },
+  "author": {
+    "name": {
+      "type": "string",
+      "sourceField": "name",
+      "destinationField": "author_name_s"
+    },
+    "bio": {
+      "type": "freetext",
+      "sourceField": "bio",
+      "destinationField": "author_bio_txt"
+    }
+  },
+  "section": {
+    "heading": {
+      "type": "string",
+      "sourceField": "heading",
+      "destinationField": "section_heading_s"
+    },
+    "body": {
+      "type": "freetext",
+      "sourceField": "body",
+      "destinationField": "section_body_txt"
+    },
+    "order": {
+      "type": "number",
+      "sourceField": "order",
+      "destinationField": "section_order_i"
+    }
+  }
+}
