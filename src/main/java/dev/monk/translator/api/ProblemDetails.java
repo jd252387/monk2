@@ -19,13 +19,6 @@ public record ProblemDetails(
         Map<String, ?> details) {
 
     public ProblemDetails {
-        details = immutableDetails(details);
-    }
-
-    private static Map<String, Object> immutableDetails(Map<String, ?> source) {
-        if (source == null || source.isEmpty()) {
-            return Map.of();
-        }
-        return Collections.unmodifiableMap(new LinkedHashMap<>(source));
+        details = Map.copyOf(details);
     }
 }

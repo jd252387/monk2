@@ -16,10 +16,6 @@ public record MaterialConfig(
         String version,
         Map<String, MaterialDefinition> materials) {
 
-    public MaterialConfig {
-        materials = immutableMap(materials);
-    }
-
     public enum BackendKind {
         ELASTICSEARCH("elasticsearch"),
         SOLR("solr");
@@ -66,12 +62,5 @@ public record MaterialConfig(
                 case SOLR -> core;
             };
         }
-    }
-
-    private static Map<String, MaterialDefinition> immutableMap(Map<String, MaterialDefinition> source) {
-        if (source == null || source.isEmpty()) {
-            return Map.of();
-        }
-        return Collections.unmodifiableMap(new LinkedHashMap<>(source));
     }
 }

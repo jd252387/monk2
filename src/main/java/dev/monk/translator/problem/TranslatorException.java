@@ -4,9 +4,14 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
  * Domain exception with a stable code and structured, non-sensitive details.
  */
+@Getter
+@Accessors(fluent = true)
 public class TranslatorException extends RuntimeException {
     private final ProblemCode code;
     private final Map<String, Object> details;
@@ -27,14 +32,6 @@ public class TranslatorException extends RuntimeException {
         super(message, cause);
         this.code = code;
         this.details = immutableDetails(details);
-    }
-
-    public ProblemCode code() {
-        return code;
-    }
-
-    public Map<String, Object> details() {
-        return details;
     }
 
     private static Map<String, Object> immutableDetails(Map<String, ?> details) {

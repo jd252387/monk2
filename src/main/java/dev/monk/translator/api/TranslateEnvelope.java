@@ -19,12 +19,6 @@ public record TranslateEnvelope(
         List<Warning> warnings,
         Diagnostics diagnostics) {
 
-    public TranslateEnvelope {
-        targets = immutableList(targets);
-        query = immutableMap(query);
-        warnings = immutableList(warnings);
-    }
-
     public record TargetMetadata(
             String materialType,
             String backend,
@@ -49,24 +43,5 @@ public record TranslateEnvelope(
             String logicalField,
             String destinationField,
             String fieldType,
-            int phraseCount) {
-
-        public Diagnostics {
-            materialTypes = immutableList(materialTypes);
-        }
-    }
-
-    private static <T> List<T> immutableList(List<T> source) {
-        if (source == null || source.isEmpty()) {
-            return List.of();
-        }
-        return List.copyOf(source);
-    }
-
-    private static Map<String, Object> immutableMap(Map<String, Object> source) {
-        if (source == null || source.isEmpty()) {
-            return Map.of();
-        }
-        return Collections.unmodifiableMap(new LinkedHashMap<>(source));
-    }
+            int phraseCount) {}
 }
